@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
-import AppSession from "./components/AppSession";
-import AxiosProvider from "./components/AxiosProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,30 +23,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AppSession>
-      <AxiosProvider>
-        <html lang="en">
-          <head>
-            <link rel="shortcut icon" href="/assets/images/favicon.ico" />
-            <link rel="stylesheet" href="/assets/css/backend-plugin.min.css?v=2.0.0" />
-            <link rel="stylesheet" href="/assets/css/backend.css?v=2.0.0" />
-            <link rel="stylesheet" href="/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" />
-            <link rel="stylesheet" href="/assets/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css" />
-            <link rel="stylesheet" href="/assets/vendor/remixicon/fonts/remixicon.css" />
-            <link rel="stylesheet" href="/assets/vendor/@icon/dripicons/dripicons.css" />
-            <link rel="stylesheet" href="/assets/vendor/fullcalendar/core/main.css" />
-            <link rel="stylesheet" href="/assets/vendor/fullcalendar/daygrid/main.css" />
-            <link rel="stylesheet" href="/assets/vendor/fullcalendar/timegrid/main.css" />
-            <link rel="stylesheet" href="/assets/vendor/fullcalendar/list/main.css" />
-            <link rel="stylesheet" href="/assets/vendor/mapbox/mapbox-gl.css" />
-          </head>
-          <body
-            className={`${geistSans.variable} ${geistMono.variable}`}
-          >
-            {children}
-          </body>
-        </html>
-      </AxiosProvider>
-    </AppSession>
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        {children}
+      </body>
+    </html>
   );
 }
