@@ -6,16 +6,18 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
 const firebaseConfig = {
-  apiKey: "AIzaSyAMLnXDyWoZ_db9m9bF7v_wtB8OSw0cWf4",
-  authDomain: "chatbox-8af00.firebaseapp.com",
-  projectId: "chatbox-8af00",
-  storageBucket: "chatbox-8af00.firebasestorage.app",
-  messagingSenderId: "949799300824",
-  appId: "1:949799300824:web:31e25e6a487055e5f831ad",
-  measurementId: "G-BCYV8SYWJ9",
-  databaseURL: "https://chatbox-8af00-default-rtdb.firebaseio.com/"
+  apiKey: "AIzaSyAwd2aEQpn8oNO22WqhUa7lbqvGcM7UN28",
+  authDomain: "pixtop-72cbc.firebaseapp.com",
+  databaseURL: "https://pixtop-72cbc-default-rtdb.firebaseio.com",
+  projectId: "pixtop-72cbc",
+  storageBucket: "pixtop-72cbc.firebasestorage.app",
+  messagingSenderId: "955891467930",
+  appId: "1:955891467930:web:61d4994a4d033021f74123",
+  databaseURL: "https://pixtop-72cbc-default-rtdb.firebaseio.com/"
 };
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
