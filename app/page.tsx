@@ -71,7 +71,7 @@ export default function Home() {
         {/* Formulaire d'ajout */}
         <div className="mb-2 rounded-2xl bg-white p-2 shadow-xl ">
           <textarea 
-            className="w-full p-2 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors resize-none"
+            className="w-full p-2 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors resize-none text-black"
             rows={5}
             value={content}
             onChange={(e) => setContent(e.target.value)}
@@ -90,7 +90,7 @@ export default function Home() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="🔍 Rechercher un texte..."
-            className="w-full p-2 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full p-2 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors text-black"
           />
         </div>
 
