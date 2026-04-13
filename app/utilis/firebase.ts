@@ -14,7 +14,7 @@ const firebaseConfig = {
   projectId: "pixtop-72cbc",
   storageBucket: "pixtop-72cbc.firebasestorage.app",
   messagingSenderId: "955891467930",
-  appId: "1:955891467930:web:61d4994a4d033021f74123",
+  appId: "1:955891467930:web:61d4994a4d033021f74123"
 };
 
 

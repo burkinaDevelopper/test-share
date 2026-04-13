@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import {app} from "./utilis/firebase";
 import { getDatabase, ref, set, onValue, remove } from "firebase/database";
 import { useState, useEffect } from "react";
@@ -17,11 +16,12 @@ export default function Home() {
   const [content,setContent]=useState<string>("")
   const [texts, setTexts] = useState<TextData[]>([])
   const [copiedId, setCopiedId] = useState<string | null>(null)
+  const [search, setSearch] = useState<string>("")
   const db = getDatabase(app);
   
   useEffect(() => {
     const textsRef = ref(db, 'texts/');
-    onValue(textsRef, (snapshot) => {
+    const unsubscribe = onValue(textsRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
         const textsArray: TextData[] = Object.keys(data).map(key => ({
@@ -36,6 +36,8 @@ export default function Home() {
         setTexts([]);
       }
     });
+
+    return () => unsubscribe();
   }, [db]);
   
   const submit = () => {
@@ -58,18 +60,18 @@ export default function Home() {
   }
 
   return (
-    <div className="flex justify-center  bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12 px-4">
-      <div className="max-w-3xl mx-auto">
+    <div className="flex min-h-screen justify-center bg-linear-to-br from-blue-50 via-purple-50 to-pink-50 px-3 sm:px-4 ">
+      <div className="mx-auto w-full max-w-3xl">
         {/* En-tête */}
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">📝 Partage de texte</h1>
+        <div className="text-center">
+          <h1 className="mb-2 text-3xl font-bold text-gray-800 sm:text-4xl">📝 Partage de texte</h1>
           <p className="text-gray-600">Partagez et gérez vos textes facilement</p>
         </div>
 
         {/* Formulaire d'ajout */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
+        <div className="mb-2 rounded-2xl bg-white p-2 shadow-xl ">
           <textarea 
-            className="w-full p-4 border-2 border-gray-200 rounded-xl mb-4 focus:outline-none focus:border-blue-500 transition-colors resize-none"
+            className="w-full p-2 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors resize-none"
             rows={5}
             value={content}
             onChange={(e) => setContent(e.target.value)}
@@ -77,40 +79,49 @@ export default function Home() {
           />
           <button 
             onClick={submit}
-            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 cursor-pointer text-white px-6 py-3 rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl"
+            className="w-full rounded-xl bg-linear-to-r from-blue-500 to-purple-600 px-6  text-sm font-semibold text-white shadow-lg transition-all duration-200 hover:from-blue-600 hover:to-purple-700 hover:shadow-xl sm:py-1 sm:text-base cursor-pointer"
           >
             ✨ Envoyer
           </button>
         </div>
+        <div className="search">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="🔍 Rechercher un texte..."
+            className="w-full p-2 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors"
+          />
+        </div>
 
         {/* Liste des textes */}
         <div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Textes enregistrés</h2>
+          <h2 className="text-center text-xl font-bold text-gray-800  sm:text-2xl">Textes enregistrés</h2>
           {texts.length === 0 ? (
-            <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
+            <div className="rounded-2xl bg-white p-8 text-center shadow-lg sm:p-12">
               <p className="text-gray-400 text-lg">📭 Aucun texte enregistré</p>
             </div>
           ) : (
-            <div className="flex flex-col gap-8">
-              {texts.map((text) => (
-                <div key={text.id} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-200">
-                  <div className="flex justify-between items-start gap-4">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-gray-800 mb-3 whitespace-pre-wrap break-words">{text.content}</p>
-                      <p className="text-sm text-gray-400 flex items-center gap-1">
+            <div className="flex flex-col gap-4 sm:gap-6">
+              {texts.filter((t) => t.content.toLowerCase().includes(search.toLowerCase())).map((text) => (
+                <div key={text.id} className="rounded-xl bg-white p-2 shadow-lg transition-shadow duration-200 hover:shadow-xl ">
+                  <div className="flex flex-col  sm:flex-row sm:items-start sm:justify-between">
+                    <div className="flex min-w-0 flex-1 flex-col">
+                      <p className="whitespace-pre-wrap wrap-break-word text-gray-800">{text.content}</p>
+                      <p className="flex items-center gap-1 text-xs text-gray-400 sm:text-sm">
                         🕒 {new Date(text.createdAt).toLocaleString('fr-FR')}
                       </p>
                     </div>
-                    <div className="flex flex-col gap-2 flex-shrink-0">
+                    <div className="flex w-full shrink-0 gap-2 sm:w-auto sm:flex-col">
                       <button
                         onClick={() => copyToClipboard(text.content, text.id)}
-                        className="bg-gradient-to-r from-green-500 to-emerald-600 cursor-pointer text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-emerald-700 text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg min-w-[100px]"
+                        className="min-w-0 flex-1 rounded-lg bg-linear-to-r from-green-500 to-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-md transition-all duration-200 hover:from-green-600 hover:to-emerald-700 hover:shadow-lg sm:min-w-25 sm:flex-none cursor-pointer"
                       >
                         {copiedId === text.id ? '✓ Copié !' : '📋 Copier'}
                       </button>
                       <button
                         onClick={() => deleteText(text.id)}
-                        className="bg-gradient-to-r from-red-500 to-rose-600 cursor-pointer text-white px-4 py-2 rounded-lg hover:from-red-600 hover:to-rose-700 text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg"
+                        className="min-w-0 flex-1 rounded-lg bg-linear-to-r from-red-500 to-rose-600 px-4 py-2 text-sm font-medium text-white shadow-md transition-all duration-200 hover:from-red-600 hover:to-rose-700 hover:shadow-lg sm:min-w-25 sm:flex-none cursor-pointer"
                       >
                         🗑️ Supprimer
                       </button>
